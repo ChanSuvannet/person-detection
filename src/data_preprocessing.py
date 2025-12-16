@@ -170,8 +170,8 @@ class DataPreprocessor:
         valid_annotations = []
         
         for _, row in tqdm(self.annotations.iterrows(), 
-                          total=len(self.annotations),
-                          desc="Validating boxes"):
+                        total=len(self.annotations),
+                        desc="Validating boxes"):
             
             image_path = images_dir / f"{row['ImageID']}.jpg"
             
