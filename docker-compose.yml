@@ -3,23 +3,22 @@ version: '3.8'
 services:
   app:
     build: .
+    image: person-detection-app
     container_name: person-detection
+
+    # Shared memory for PyTorch / DataLoader
+    shm_size: "8gb"
+
+    # Persist results to host
     volumes:
-      # Mount local directories to container
       - ./data:/app/data
       - ./models:/app/models
       - ./results:/app/results
-      - ./src:/app/src
       - ./config:/app/config
+
+    # Environment
     environment:
-      - NVIDIA_VISIBLE_DEVICES=all
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
-    stdin_open: true
+      PYTHONUNBUFFERED: "1"
+
+    # Keep container alive only if debugging
     tty: true
-    shm_size: '8gb' # Increase shared memory for data loading

@@ -1,4 +1,4 @@
-# Use official Python runtime with CUDA support for GPU training
+# Use official PyTorch runtime with CUDA support
 FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
 
 # Set working directory
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
+# Copy requirements first (cache friendly)
 COPY requirements.txt .
 
 # Install Python dependencies
@@ -25,14 +25,20 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create necessary directories
-RUN mkdir -p data/raw data/processed/train/images data/processed/train/labels \
+RUN mkdir -p \
+    data/raw \
+    data/processed/train/images data/processed/train/labels \
     data/processed/val/images data/processed/val/labels \
     data/processed/test/images data/processed/test/labels \
-    models/original models/enhanced results/metrics results/visualizations
+    models/original models/enhanced \
+    results/metrics results/visualizations
 
-# Set environment variables
+# Make pipeline executable
+RUN chmod +x /app/script/pipeline.sh
+
+# Environment variables
 ENV PYTHONUNBUFFERED=1
 ENV OPENCV_IO_ENABLE_OPENEXR=1
 
-# Default command
-CMD ["bash"]
+# Auto-run pipeline
+CMD ["/app/script/pipeline.sh"]
