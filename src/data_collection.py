@@ -102,33 +102,29 @@ class OpenImagesDownloader:
         """
         print("Filtering Person class annotations...")
 
-        # Load annotation files
-        train_ann = pd.read_csv(self.raw_dir / "oidv7-train-annotations-bbox.csv")
+        # Load validation annotations (this file still works)
         val_ann = pd.read_csv(self.raw_dir / "oidv7-validation-annotations-bbox.csv")
 
         # Filter for Person class only
-        person_train = train_ann[train_ann["LabelName"] == self.person_class_id]
-        person_val = val_ann[val_ann["LabelName"] == self.person_class_id]
+        person_annotations = val_ann[val_ann["LabelName"] == self.person_class_id]
 
-        print(f"✓ Found {len(person_train)} person annotations in training set")
-        print(f"✓ Found {len(person_val)} person annotations in validation set")
-
-        # Combine and get unique image IDs
-        all_persons = pd.concat([person_train, person_val])
+        print(f"✓ Found {len(person_annotations)} person annotations in validation set")
 
         # Get unique image IDs and limit to target number
         target_images = self.config["dataset"]["total_images"]
-        unique_images = all_persons["ImageID"].unique()[:target_images]
+        unique_images = person_annotations["ImageID"].unique()[:target_images]
 
         # Filter annotations for selected images
-        person_annotations = all_persons[all_persons["ImageID"].isin(unique_images)]
+        person_annotations = person_annotations[
+            person_annotations["ImageID"].isin(unique_images)
+        ]
 
         # Save filtered annotations
         output_path = self.raw_dir / "person_annotations.csv"
         person_annotations.to_csv(output_path, index=False)
 
-        print(f"Filtered {len(unique_images)} images with person annotations")
-        print(f"Saved to {output_path}\n")
+        print(f"✓ Filtered {len(unique_images)} images with person annotations")
+        print(f"✓ Saved to {output_path}\n")
 
         return person_annotations
 
@@ -230,7 +226,7 @@ class OpenImagesDownloader:
         print("=" * 70 + "\n")
 
         # Step 1: Download metadata
-        self.download_metadata()
+        # self.download_metadata()
 
         # Step 2: Filter person annotations
         annotations = self.filter_person_annotations()
