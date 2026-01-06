@@ -29,7 +29,7 @@ training                  :
   model                   : "yolov8n.pt" # YOLOv8 nano (fastest)
   # Alternative: "yolov8s.pt" (small), "yolov8m.pt" (medium)
 
-  epochs                  : 100
+  epochs                  : 50
   batch_size              : 16
   img_size                : 640
   patience                : 20 # Early stopping patience

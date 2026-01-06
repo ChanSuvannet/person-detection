@@ -99,7 +99,7 @@ class ModelEvaluator:
             'precision': float(results.box.mp),
             'recall': float(results.box.mr),
             'f1_score': 2 * (results.box.mp * results.box.mr) / (results.box.mp + results.box.mr) 
-                       if (results.box.mp + results.box.mr) > 0 else 0
+                if (results.box.mp + results.box.mr) > 0 else 0
         }
         
         print(f"\nTest Set Metrics ({dataset_type}):")
@@ -323,8 +323,8 @@ class ModelEvaluator:
             for bar, val in zip(bars, values):
                 height = bar.get_height()
                 ax.text(bar.get_x() + bar.get_width()/2., height,
-                       f'{val:.4f}',
-                       ha='center', va='bottom', fontweight='bold')
+                f'{val:.4f}',
+                ha='center', va='bottom', fontweight='bold')
             
             # Calculate improvement
             improvement = ((values[1] - values[0]) / values[0] * 100) if values[0] > 0 else 0
@@ -358,7 +358,7 @@ class ModelEvaluator:
                 improvement = ((enh_val - orig_val) / orig_val * 100) if orig_val > 0 else 0
                 
                 f.write(f"{metric:<15} {orig_val:<12.4f} {enh_val:<12.4f} "
-                       f"{"+" if improvement >= 0 else ""}{improvement:<14.2f}%\n")
+                f"{"+" if improvement >= 0 else ""}{improvement:<14.2f}%\n")
             
             f.write("="*70 + "\n")
         
@@ -416,7 +416,7 @@ class ModelEvaluator:
             improvement = ((enh - orig) / orig * 100) if orig > 0 else 0
             symbol = "📈" if improvement > 0 else "📉" if improvement < 0 else "➡️"
             print(f"  {symbol} {metric}: {orig:.4f} → {enh:.4f} "
-                  f"({"+" if improvement >= 0 else ""}{improvement:.2f}%)")
+                f"({"+" if improvement >= 0 else ""}{improvement:.2f}%)")
 
 
 def main():
@@ -425,7 +425,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description='Evaluate Person Detection Models')
     parser.add_argument('--config', type=str, default='config/config.yaml',
-                       help='Path to config file')
+    help='Path to config file')
     
     args = parser.parse_args()
     
